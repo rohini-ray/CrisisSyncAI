@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <h1>🚨 Admin Dashboard</h1>
+
+  <div class="container">
+    <ul id="alertList"></ul>
+  </div>
+
+  <script>
+    fetch("http://localhost:5000/alerts")
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById("alertList");
+
+        data.reverse().forEach(alert => {
+          const li = document.createElement("li");
+
+          // Add class based on type
+          let typeClass = "";
+          if (alert.type === "Fire") typeClass = "fire";
+          if (alert.type === "Medical") typeClass = "medical";
+          if (alert.type === "Crime") typeClass = "crime";
+
+          li.className = typeClass;
+
+          li.innerHTML = `
+            <strong>Type:</strong> ${alert.type} <br>
+            <strong>Location:</strong> ${alert.latitude}, ${alert.longitude} <br>
+            <strong>Time:</strong> ${alert.time}
+          `;
+
+          list.appendChild(li);
+        });
+      })
+      .catch(err => {
+        console.error("Error fetching alerts:", err);
+      });
+  </script>
+
+</body>
+</html>
