@@ -1,9 +1,6 @@
-function goToType() {
-  window.location.href = "type.html";
-}
-
 function sendAlert(type) {
   navigator.geolocation.getCurrentPosition(position => {
+
     const data = {
       type: type,
       latitude: position.coords.latitude,
@@ -17,8 +14,15 @@ function sendAlert(type) {
       },
       body: JSON.stringify(data)
     })
+    .then(response => response.text())
     .then(() => {
+      // 👉 Redirect after success
       window.location.href = "success.html";
+    })
+    .catch(err => {
+      console.error("Error:", err);
+      alert("Failed to send alert");
     });
+
   });
 }
